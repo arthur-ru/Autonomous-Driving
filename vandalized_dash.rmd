@@ -1,0 +1,10 @@
+---
+title: "Themed dashboard"
+output:
+  flexdashboard::flex_dashboard:
+    theme:
+      version: 4
+      bootswatch: minty
+    orientation: columns
+    vertical_layout: fill
+---
