@@ -110,7 +110,33 @@ server <- function(input, output, session) {
       paste("vandalised_sign_", Sys.Date(), ".png", sep = "")
     },
     content = function(file) {
-      magick::image_write(values$image, path = file, format = "png")
+      x <- as.numeric(input$x_pos)
+      y <- as.numeric(input$y_pos)
+      brightness_val <- as.numeric(input$brightness)
+      saturation_val <- as.numeric(input$saturation)
+      contrast_val <- as.numeric(input$contrast)
+
+      contrast_scale <- (contrast_val - 100) / 50  # Normalise around 0; adjust the divisor for scaling
+
+      adjusted_image <- values$image %>%
+        magick::image_modulate(brightness = brightness_val, saturation = saturation_val, hue = 100)
+
+      if (contrast_scale > 0) {
+        # Increase contrast
+        adjusted_image <- adjusted_image %>%
+          magick::image_contrast(sharpen = TRUE) %>%
+          magick::image_contrast(sharpen = TRUE)  # Repeat for stronger effect if needed
+      } else if (contrast_scale < 0) {
+        # Decrease contrast by applying blur
+        # Blur intensity is adjusted based on the value of contrast_scale
+        blur_radius <- abs(contrast_scale) * 2  # Adjust this formula as needed
+        blur_sigma <- abs(contrast_scale)
+        adjusted_image <- adjusted_image %>%
+          magick::image_blur(radius = blur_radius, sigma = blur_sigma)
+      }
+
+      # Write the adjusted image to the file
+      magick::image_write(adjusted_image, path = file, format = "png")
     }
   )
 }
