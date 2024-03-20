@@ -5,6 +5,8 @@ account: arthurrubio
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 11214071
-bundleId: 8251135
+bundleId: 8363967
 url: https://arthurrubio.shinyapps.io/autonomous-driving/
 version: 1
+asMultiple: FALSE
+asStatic: FALSE
